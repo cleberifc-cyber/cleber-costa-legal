@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TikTok OAuth Callback — Cleber_Costa</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 720px; margin: 60px auto; padding: 0 20px; color: #222; line-height: 1.6; text-align: center; }
+  h1 { color: #800000; }
+  .box { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin: 24px 0; word-break: break-all; font-family: monospace; font-size: 14px; }
+  button { background: #800000; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 15px; }
+  button:hover { background: #600000; }
+  .status { color: #060; font-weight: bold; }
+  .error { color: #c00; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>Cleber_Costa</h1>
+<h2>TikTok Authorization Callback</h2>
+
+<p id="status">Processing authorization response...</p>
+
+<div id="codeBox" class="box" style="display:none;">
+  <strong>Authorization Code:</strong><br>
+  <span id="code"></span>
+</div>
+
+<button id="copyBtn" style="display:none;" onclick="copyCode()">Copy Code</button>
+
+<p id="instructions" style="display:none; margin-top: 30px; color: #666; font-size: 14px;">
+  Copy the authorization code above and paste it into your application terminal.
+</p>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const error = params.get('error');
+  const statusEl = document.getElementById('status');
+
+  if (error) {
+    statusEl.innerHTML = '<span class="error">Authorization failed: ' + error + '</span>';
+  } else if (code) {
+    statusEl.innerHTML = '<span class="status">Authorization successful</span>';
+    document.getElementById('code').textContent = code;
+    document.getElementById('codeBox').style.display = 'block';
+    document.getElementById('copyBtn').style.display = 'inline-block';
+    document.getElementById('instructions').style.display = 'block';
+  } else {
+    statusEl.innerHTML = 'No authorization code received. Please try again from the application.';
+  }
+
+  function copyCode() {
+    const code = document.getElementById('code').textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      document.getElementById('copyBtn').textContent = 'Copied!';
+      setTimeout(() => { document.getElementById('copyBtn').textContent = 'Copy Code'; }, 2000);
+    });
+  }
+</script>
+
+</body>
+</html>
